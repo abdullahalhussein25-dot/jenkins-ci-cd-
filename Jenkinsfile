@@ -1,1 +1,6 @@
-﻿pipeline { agent any; stages { stage("Hello"){ steps { echo "OK" } } } }
+pipeline {
+  agent any
+  stages {
+    stage("Hello") { steps { echo "OK" } }
+  }
+}
