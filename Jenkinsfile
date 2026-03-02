@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   stages {
+
     stage('Checkout') {
       steps {
         checkout scm
@@ -19,5 +20,18 @@ pipeline {
         sh 'java Hello'
       }
     }
+
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t abdullah1234567/hello-ci:latest .'
+      }
+    }
+
+    stage('Push Docker Image') {
+      steps {
+        sh 'docker push abdullah1234567/hello-ci:latest'
+      }
+    }
+
   }
 }
