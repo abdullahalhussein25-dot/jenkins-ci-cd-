@@ -1,6 +1,7 @@
 
 # Jenkins CI/CD Pipeline Project
 
+
 This project demonstrates a simple CI/CD pipeline using Jenkins, Docker, GitHub and Google Cloud.
 
 ## Technologies
@@ -27,6 +28,7 @@ https://hub.docker.com/r/abdullah1234567/hello-ci
 
 ## Example Output
 Hello from Jenkins CI/CD!
+
 
 
 
