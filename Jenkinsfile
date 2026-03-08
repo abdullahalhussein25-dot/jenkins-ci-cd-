@@ -32,6 +32,12 @@ pipeline {
         sh 'docker push abdullah1234567/hello-ci:latest'
       }
     }
+    stage('Deploy Container') {
+  steps {
+    sh 'docker rm -f hello-container || true'
+    sh 'docker run --name hello-container abdullah1234567/hello-ci:latest'
+  }
+}
 
   }
 }
