@@ -1,43 +1,44 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    environment {
+        IMAGE_NAME = 'jenkins-ci-cd-app'
+        CONTAINER_NAME = 'jenkins-ci-cd-container'
     }
 
-    stage('Compile') {
-      steps {
-        sh 'javac Hello.java'
-      }
-    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'git@github.com:abdullahalhussein25-dot/jenkins-ci-cd-.git'
+            }
+        }
 
-    stage('Run') {
-      steps {
-        sh 'java Hello'
-      }
-    }
+        stage('Build Maven') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t abdullah1234567/hello-ci:latest .'
-      }
-    }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
 
-    stage('Push Docker Image') {
-      steps {
-        sh 'docker push abdullah1234567/hello-ci:latest'
-      }
-    }
-    stage('Deploy Container') {
-  steps {
-    sh 'docker rm -f hello-container || true'
-    sh 'docker run --name hello-container abdullah1234567/hello-ci:latest'
-  }
-}
+        stage('Stop Old Container') {
+            steps {
+                sh '''
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                '''
+            }
+        }
 
-  }
+        stage('Run New Container') {
+            steps {
+                sh 'docker run -d --name $CONTAINER_NAME -p 8081:8081 $IMAGE_NAME'
+            }
+        }
+    }
 }
